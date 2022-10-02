@@ -33,7 +33,7 @@ The sample output of the `/metric` endpoint after 5 incoming HTTP requests shown
 
 Note: with no initial incoming request, only `version` metric is reported.
 
-```
+```bash
 # HELP http_request_duration_seconds Duration of all HTTP requests
 # TYPE http_request_duration_seconds histogram
 http_request_duration_seconds_bucket{code="200",handler="found",method="get",le="0.005"} 5
