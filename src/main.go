@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+	"math/rand"
+	"fmt"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -31,9 +34,13 @@ var (
 		Name: "http_request_duration_seconds",
 		Help: "Duration of all HTTP requests",
 	}, []string{"code", "handler", "method"})
+
 )
 
 func main() {
+	rand_min := 1
+	rand_max := 11
+	rand.Seed(time.Now().UnixNano())
 	version.Set(1)
 	bind := ""
 	enableH2c := false
@@ -52,6 +59,12 @@ func main() {
 		http.ServeFile(w, r, "public/index.html")
 		// w.Write([]byte("Hello from example application."))
 	})
+	slowHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sleep_duration := rand.Intn(rand_max - rand_min) + rand_min
+		time.Sleep(time.Duration(sleep_duration) * time.Second)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(fmt.Sprintf("slow for %v", sleep_duration)))
+	})	
 	notfoundHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	})
@@ -64,8 +77,14 @@ func main() {
 		promhttp.InstrumentHandlerCounter(httpRequestsTotal, foundHandler),
 	)
 
+	slowChain := promhttp.InstrumentHandlerDuration(
+		httpRequestDuration.MustCurryWith(prometheus.Labels{"handler": "found"}),
+		promhttp.InstrumentHandlerCounter(httpRequestsTotal, slowHandler),
+	)
+
 	mux := http.NewServeMux()
 	mux.Handle("/", foundChain)
+	mux.Handle("/slow", slowChain)
 	mux.Handle("/err", promhttp.InstrumentHandlerCounter(httpRequestsTotal, notfoundHandler))
 	mux.Handle("/internal-err", promhttp.InstrumentHandlerCounter(httpRequestsTotal, internalErrorHandler))
 	mux.Handle("/metrics", promhttp.HandlerFor(r, promhttp.HandlerOpts{}))
