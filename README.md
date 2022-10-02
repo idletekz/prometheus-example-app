@@ -15,7 +15,7 @@ For this example application, [PodMonitor manifest](manifest/pod-monitor.yml) de
 [prometheus]:https://prometheus.io/
 [client-golang]:https://github.com/prometheus/client_golang
 [prometheus-operator]:https://github.com/prometheus-operator/prometheus-operator
-[prometheus-operator-quickstart]:https://github.com/coreos/prometheus-operator#quickstart
+[prometheus-operator-quickstart]:https://github.com/prometheus-operator/prometheus-operator#quickstart
 [prometheus-operator-crd]:https://github.com/coreos/prometheus-operator#customresourcedefinitions
 
 ## Exposed Prometheus metrics
