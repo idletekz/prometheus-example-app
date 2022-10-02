@@ -17,6 +17,8 @@ For this example application, [PodMonitor manifest](manifest/pod-monitor.yml) de
 [prometheus-operator]:https://github.com/prometheus-operator/prometheus-operator
 [prometheus-operator-quickstart]:https://github.com/prometheus-operator/prometheus-operator#quickstart
 [prometheus-operator-crd]:https://github.com/coreos/prometheus-operator#customresourcedefinitions
+[kube-prometheus-stack]:https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack
+[podmonitor-api]:https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PodMonitor
 
 ## Exposed Prometheus metrics
 
@@ -56,4 +58,22 @@ http_requests_total{code="200",method="get"} 5
 # HELP version Version information about this binary
 # TYPE version gauge
 version{version="v0.3.0"} 1
+```
+
+## Install kube-prometheus-stack
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+kubectl create ns prom
+
+helm install prometheus prometheus-community/kube-prometheus-stack -n prom
+
+# prometheus ui
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090
+
+# view grafana dashboard
+kubectl port-forward deployment/prometheus-grafana 3000
+  username: admin
+  password: prom-operator
 ```

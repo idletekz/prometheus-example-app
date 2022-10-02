@@ -1,9 +1,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  labels:
-    app: prometheus-example-app
   name: prometheus-example-app
+  labels:
+    release: prometheus
 spec:
   selector:
     matchLabels:
