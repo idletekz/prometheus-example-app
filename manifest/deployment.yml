@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: prometheus-example-app
+  name: prometheus-example-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-example-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prometheus-example-app
+    spec:
+      containers:
+      - name: prometheus-example-app
+        image: idletekz/prometheus-example-app:latest
+        ports:
+        - name: http-server
+          containerPort: 3000
