@@ -65,9 +65,9 @@ version{version="v0.3.0"} 1
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-kubectl create ns prom
+kubectl create ns monitoring
 
-helm install prometheus prometheus-community/kube-prometheus-stack -n prom
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 
 # prometheus ui
 kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090
