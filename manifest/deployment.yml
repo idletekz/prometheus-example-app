@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: prometheus-example-app
-        image: idletekz/prometheus-example-app:0.0.1
+        image: idletekz/prometheus-example-app:latest
         ports:
         - name: http-server
           containerPort: 3000
