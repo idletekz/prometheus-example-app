@@ -65,7 +65,13 @@ version{version="v0.3.0"} 1
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-kubectl create ns monitoring
+k create ns monitoring
+
+k config set-context --current --namespace monitoring
+
+k apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml
+
+k apply -f manifest
 
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 
