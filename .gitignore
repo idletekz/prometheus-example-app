@@ -1,2 +1,4 @@
 config
 gke_gcloud_auth_plugin_cache
+delegate.yml
+hrns-github*
